@@ -1,0 +1,6 @@
+*
+!.gitignore
+!Cities.cs
+!Makefile
+!Utils.cs
+!cities.csproj
