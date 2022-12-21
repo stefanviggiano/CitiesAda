@@ -44,23 +44,41 @@ namespace Cities
         static void Main()
         {
 
-            var numCities = 5;
-            var distancies = new int[,]
-            {
-                { 00, 15, 30, 05, 12 },
-                { 15, 00, 10, 17, 28 },
-                { 30, 10, 00, 03, 11 },
-                { 05, 17, 03, 00, 80 },
-                { 12, 28, 11, 80, 00 }
-            };
+            Console.Write("Digite o número de cidades: ");
+            int.TryParse(Console.ReadLine(), out int numCities);
+            var distances = new int[numCities, numCities];
 
-            var route = new int[] {0, 1, 2, 3, 4};
+            for (int i = 0; i < numCities; i++)
+            {
+                for (int j = i+1; j < numCities; j++)
+                {
+                    Console.Write($"Digite a distância entre a cidade {i} e a"
+                        + $" cidade {j}: ");
+                    int.TryParse(Console.ReadLine(), out int dist);
+                    distances[i, j] = dist;
+                    distances[j, i] = dist;
+
+                }
+            }
+
+
+            Console.Write("Digite o número de cidades na sua rota: ");
+            int.TryParse(Console.ReadLine(), out int routeLength);
+            var route = new int[routeLength];
+
+            for (int i = 0; i < routeLength; i++)
+            {
+                string adjective = (i==0 ? "primeira" : "próxima");
+                Console.Write($"Digite a {adjective} cidade: ");
+                int.TryParse(Console.ReadLine(), out route[i]);
+            }
 
             var distance = 0;
             foreach (Tuple<int, int> pair in Utils.PairWise(route))
-                distance += distancies[pair.Item1, pair.Item2];
+                distance += distances[pair.Item1, pair.Item2];
             Console.WriteLine(distance);
         }
+
 
     }
 }
