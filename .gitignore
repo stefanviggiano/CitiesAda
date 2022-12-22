@@ -1,6 +1,7 @@
 *
 !.gitignore
-!Cities.cs
+!Cities/
+!Cities/Cities.cs
+!Cities/Utils.cs
+!Cities/Cities.csproj
 !Makefile
-!Utils.cs
-!cities.csproj

@@ -3,6 +3,6 @@
 main:
 	dotnet build
 clear:
-	rm -r obj
-	rm -r bin
-	rm cities.csproj
+	rm -r Cities/obj
+	rm -r Cities/bin
+	rm Cities/cities.csproj
