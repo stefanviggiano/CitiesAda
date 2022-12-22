@@ -27,30 +27,22 @@ namespace Cities
             string distancesFileName = System.IO.Path.Combine(
                     desktopPath, "matriz.txt");
 
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-            };
             using var distancesReader = new StreamReader(distancesFileName);
-            using var distancesParser = new CsvParser(distancesReader, config);
+            string[] lines = distancesReader.ReadToEnd().Split();
 
-            if (!distancesParser.Read())
-                return default;
-
-            int numCities = distancesParser.Record.Length;
+            int numCities = 5;
             var distances = new int[numCities, numCities];
 
             for (int i = 0; i < numCities; i++)
             {
-                string[] dists = distancesParser.Record;
+                string line = lines[i];
+                string[] dists = lines[i].Split(",");
                 for (int j = 0; j < numCities; j++)
                 {
                     int.TryParse(dists[j], out int dist);
                     distances[i, j] = dist;
                     distances[j, i] = dist;
                 }
-
-            distancesParser.Read();
             }
 
             return distances;
@@ -62,18 +54,11 @@ namespace Cities
                     Environment.SpecialFolder.Desktop);
             string routeFileName = System.IO.Path.Combine(
                     desktopPath, "caminho.txt");
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-            };
+
             using var routeReader = new StreamReader(routeFileName);
-            using var routeParser = new CsvParser(routeReader, config);
-
-            if (!routeParser.Read())
-                return default;
-
-            int[] route = routeParser.Record.Select(
+            var route = routeReader.ReadToEnd().Split(",").Select(
                     s => int.Parse(s) - 1).ToArray();
+
             return route;
         }
     }
