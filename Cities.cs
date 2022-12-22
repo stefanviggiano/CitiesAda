@@ -16,52 +16,14 @@ namespace Cities
     {
         static void Main()
         {
-            string desktopPath = Environment.GetFolderPath(
-                    Environment.SpecialFolder.Desktop);
-            string distancesFileName = System.IO.Path.Combine(
-                    desktopPath, "matrix.txt");
-            string routeFileName = System.IO.Path.Combine(
-                    desktopPath, "caminho.txt");
-
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-            };
-            using var distancesReader = new StreamReader(distancesFileName);
-            using var distancesParser = new CsvParser(distancesReader, config);
-
-            if (!distancesParser.Read())
-                return;
-
-            int numCities = distancesParser.Record.Length;
-            var distances = new int[numCities, numCities];
-
-
-            for (int i = 0; i < numCities; i++)
-            {
-                string[] dists = distancesParser.Record;
-                for (int j = 0; j < numCities; j++)
-                {
-                    int.TryParse(dists[j], out int dist);
-                    distances[i, j] = dist;
-                    distances[j, i] = dist;
-                }
-
-            distancesParser.Read();
-            }
-
-            using var routeReader = new StreamReader(routeFileName);
-            using var routeParser = new CsvParser(routeReader, config);
-            if (!routeParser.Read())
-                return;
-
-            var route = routeParser.Record.Select(s => int.Parse(s) - 1);
+            int[,] distances = Utils.GetDistances();
+            int[] route = Utils.GetRoute();
 
             var distance = 0;
             foreach (Tuple<int, int> pair in Utils.PairWise(route))
                 distance += distances[pair.Item1, pair.Item2];
-            Console.WriteLine(distance);
 
+            Console.WriteLine($"O caminho tem tamânho {distance}.");
         }
     }
 }
