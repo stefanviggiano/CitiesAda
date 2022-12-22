@@ -22,35 +22,21 @@ namespace Cities
 
         public static int[,] GetDistances()
         {
-            string desktopPath = Environment.GetFolderPath(
-                    Environment.SpecialFolder.Desktop);
-            string distancesFileName = System.IO.Path.Combine(
-                    desktopPath, "matriz.txt");
 
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-            };
-            using var distancesReader = new StreamReader(distancesFileName);
-            using var distancesParser = new CsvParser(distancesReader, config);
-
-            if (!distancesParser.Read())
-                return default;
-
-            int numCities = distancesParser.Record.Length;
+            Console.Write("Digite o número de cidades: ");
+            int.TryParse(Console.ReadLine(), out int numCities);
             var distances = new int[numCities, numCities];
 
             for (int i = 0; i < numCities; i++)
             {
-                string[] dists = distancesParser.Record;
-                for (int j = 0; j < numCities; j++)
+                for (int j = i+1; j < numCities; j++)
                 {
-                    int.TryParse(dists[j], out int dist);
+                    Console.Write($"Digite a distância entre a cidade {i+1} e a"
+                        + $" cidade {j+1}: ");
+                    int.TryParse(Console.ReadLine(), out int dist);
                     distances[i, j] = dist;
                     distances[j, i] = dist;
                 }
-
-            distancesParser.Read();
             }
 
             return distances;
@@ -58,22 +44,18 @@ namespace Cities
 
         public static int[] GetRoute()
         {
-            string desktopPath = Environment.GetFolderPath(
-                    Environment.SpecialFolder.Desktop);
-            string routeFileName = System.IO.Path.Combine(
-                    desktopPath, "caminho.txt");
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+
+            Console.Write("Digite o número de cidades na sua rota: ");
+            int.TryParse(Console.ReadLine(), out int routeLength);
+            var route = new int[routeLength];
+
+            for (int i = 0; i < routeLength; i++)
             {
-                HasHeaderRecord = false,
-            };
-            using var routeReader = new StreamReader(routeFileName);
-            using var routeParser = new CsvParser(routeReader, config);
-
-            if (!routeParser.Read())
-                return default;
-
-            int[] route = routeParser.Record.Select(
-                    s => int.Parse(s) - 1).ToArray();
+                string adjective = (i==0 ? "primeira" : "próxima");
+                Console.Write($"Digite a {adjective} cidade: ");
+                int.TryParse(Console.ReadLine(), out int city);
+                route[i] = city - 1;
+            }
             return route;
         }
     }
